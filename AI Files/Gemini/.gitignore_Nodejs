@@ -1,0 +1,45 @@
+# --- Dependencies ---
+# Do not commit the heavy modules folder
+node_modules/
+jspm_packages/
+
+# --- Build Outputs ---
+# Folder for compiled code (TypeScript/Babel)
+dist/
+build/
+out/
+.next/
+.nuxt/
+
+# --- Logs ---
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# --- Environment & Secrets ---
+# Crucial: never leak your API keys or DB credentials
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+
+# --- Testing ---
+coverage/
+.nyc_output/
+
+# --- IDE & OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Optional: Lockfiles ---
+# Usually, you SHOULD commit package-lock.json or yarn.lock.
+# Only uncomment the lines below if you have a very specific reason.
+# package-lock.json
+# yarn.lock

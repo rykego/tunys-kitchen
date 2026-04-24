@@ -1,0 +1,91 @@
+# ============================================================
+#  .gitignore — Next.js + Supabase + Vercel + Tailwind CSS
+# ============================================================
+
+# ── Dependencies ────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# ── Next.js build output ────────────────────────────────────
+.next/
+out/
+build/
+dist/
+
+# ── Environment variables (NEVER commit secrets) ────────────
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# ── Supabase ────────────────────────────────────────────────
+.supabase/
+supabase/.temp/
+supabase/migrations/*.sql.bak
+
+# ── Vercel ──────────────────────────────────────────────────
+.vercel/
+.vercel
+
+# ── TypeScript ──────────────────────────────────────────────
+*.tsbuildinfo
+next-env.d.ts
+
+# ── Testing ─────────────────────────────────────────────────
+coverage/
+.nyc_output/
+*.lcov
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# ── Tailwind / PostCSS cache ─────────────────────────────────
+.postcss-cache/
+
+# ── ESLint & Prettier cache ──────────────────────────────────
+.eslintcache
+.prettiercache
+.stylelintcache
+
+# ── IDE & editor files ───────────────────────────────────────
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+*.bak
+*.orig
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs ────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ── Package manager lock files (keep only ONE) ──────────────
+# Uncomment the lock file you are NOT using:
+# package-lock.json   # keep if using npm
+# yarn.lock           # keep if using yarn
+# pnpm-lock.yaml      # keep if using pnpm
+
+# ── Misc ────────────────────────────────────────────────────
+*.tgz
+.cache/
+.parcel-cache/
+.turbo/
+.swc/
