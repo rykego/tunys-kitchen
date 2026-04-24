@@ -192,7 +192,7 @@ export default function Home() {
           <span className="text-2xl">🍲</span>
           <div>
             <h1 className="font-serif text-xl font-bold">Tuny's Kitchen</h1>
-            <p className="text-[10px] text-[#d4952a] tracking-widest uppercase">Home-cooked · Singapore</p>
+            <p className="text-[10px] text-[#d4952a] tracking-widest uppercase">Pre-Order · Home-cooked · Singapore</p>
           </div>
         </div>
         <button onClick={() => setIsCartOpen(true)} className="bg-[#c8401a] px-4 py-2 rounded-full font-bold flex items-center gap-2 hover:scale-105 transition">
@@ -204,7 +204,43 @@ export default function Home() {
       <section className="bg-gradient-to-br from-[#3b2415] to-[#c8401a] text-[#fdf6ec] text-center py-12 px-6">
         <h2 className="text-4xl md:text-5xl mb-3 font-serif italic">Fresh & <span className="text-[#d4952a]">Homemade</span></h2>
         <p className="max-w-md mx-auto text-[#e8d5b7] text-sm">Indonesian home-cooked meals delivered to your doorstep.</p>
+        <div className="mt-5 inline-flex items-center gap-2 bg-[#d4952a]/20 border border-[#d4952a] rounded-full px-5 py-2">
+          <span className="text-lg">📅</span>
+          <span className="text-[#fdf6ec] text-sm font-semibold tracking-wide">Pre-Order Only — Order in Advance</span>
+        </div>
       </section>
+
+      {/* PRE-ORDER NOTICE BANNER */}
+      <div className="bg-[#d4952a]/10 border-b border-[#d4952a]/30 py-3 px-4 text-center">
+        <p className="text-[#3b2415] text-sm font-medium">
+          ⏰ <strong>All orders are pre-ordered in advance.</strong> We will confirm your delivery date &amp; time via WhatsApp after your order is placed.
+        </p>
+      </div>
+
+      {/* OUR STORY */}
+      <section className="max-w-2xl mx-auto px-6 py-10 text-center">
+        <div className="inline-flex items-center gap-2 mb-4">
+          <span className="block h-px w-8 bg-[#d4952a]"></span>
+          <span className="text-[#d4952a] text-xs font-bold tracking-widest uppercase">Our Story</span>
+          <span className="block h-px w-8 bg-[#d4952a]"></span>
+        </div>
+        <h3 className="font-serif text-2xl md:text-3xl text-[#3b2415] mb-5 italic">A Family Kitchen, Born from Homesickness</h3>
+        <p className="text-[#5a3a25] text-sm md:text-base leading-relaxed">
+          Nestled in the East Coast of Singapore is a pre-ordered home cooked Indonesian food. We started off without the intention of selling food online. We as a family usually miss the true authentic Indonesian food that is not available at affordable price in Singapore. So we started cooking at home and sometimes offer the excess to our Indonesian friends. Friends who tried our food suggested that we should cook more and offer the food for sale online. When the Covid-19 hit Singapore in 2020 and since we were working from home, we decided to start this online business to keep ourselves busy and occupied. So that is how the story of how our online pre-ordered food started on Instagram.
+        </p>
+        <div className="mt-6 flex justify-center gap-3 flex-wrap">
+          <span className="bg-[#f5e6cc] text-[#3b2415] text-xs font-semibold px-4 py-1.5 rounded-full">🏠 Home-cooked</span>
+          <span className="bg-[#f5e6cc] text-[#3b2415] text-xs font-semibold px-4 py-1.5 rounded-full">🇮🇩 Authentic Indonesian</span>
+          <span className="bg-[#f5e6cc] text-[#3b2415] text-xs font-semibold px-4 py-1.5 rounded-full">📅 Pre-Order</span>
+          <span className="bg-[#f5e6cc] text-[#3b2415] text-xs font-semibold px-4 py-1.5 rounded-full">📍 East Coast, Singapore</span>
+        </div>
+      </section>
+
+      {/* MENU HEADING */}
+      <div className="text-center pb-2">
+        <h3 className="font-serif text-xl text-[#3b2415] italic">Browse Our Menu</h3>
+        <p className="text-xs text-[#8a6a50] mt-1">Pre-order your favourites below</p>
+      </div>
 
       {/* TABS */}
       <div className="flex gap-2 overflow-x-auto p-4 md:justify-center sticky top-[68px] bg-[#fdf6ec] z-30">
