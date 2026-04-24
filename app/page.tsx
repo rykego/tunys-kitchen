@@ -1,32 +1,32 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ShoppingCart, X, CheckCircle2, QrCode, Plus, Minus } from 'lucide-react';
+import { ShoppingCart, X, CheckCircle2, QrCode, Plus, Minus, MapPin, Loader2 } from 'lucide-react';
 
-// ── CONFIGURATION (Now pulling from Environment Variables) ──
+// ── CONFIGURATION ──
 const CONFIG = {
   businessName: process.env.NEXT_PUBLIC_BUSINESS_NAME || "Default Kitchen",
   paynowNumber: process.env.NEXT_PUBLIC_PAYNOW_NUMBER || "",
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "",
 };
 
-// ── MENU DATA (From your original index.html) ──
+// ── MENU DATA ──
 const MENU = {
   main: [
-    { id:'m1', name:'Nasi Kuning (Yellow Rice) Set', emoji:'🍛', price:12.00,  desc:'Fragrant turmeric yellow rice served with sides & sambal.' },
-    { id:'m2', name:'Nasi Uduk Set', emoji:'🍲', price:12.00,  desc:'Fragrant coconut steamed rice served with traditional Indonesian sides.' },
-    { id:'m3', name:'Sambal Udang Belado', emoji:'🦐', price:10.00,  desc:'Succulent prawns & petai beans wok-tossed in fiery Belado sambal.' },
-    { id:'m4', name:'Soto Ayam Betawi', emoji:'🍜', price:10.00,  desc:'Rich and creamy Jakarta-style chicken soup with lontong and crispy shallots.' },
-    { id:'m5', name:'Ayam Taliwang', emoji:'🍗', price:11.00,  desc:'Lombok-style grilled chicken marinated in a smoky, spicy taliwang sauce.' },
+    { id:'m1', name:'Nasi Kuning (Yellow Rice) Set', emoji:'🍛', price:12.00, desc:'Fragrant turmeric yellow rice served with sides & sambal.' },
+    { id:'m2', name:'Nasi Uduk Set', emoji:'🍲', price:12.00, desc:'Fragrant coconut steamed rice served with traditional Indonesian sides.' },
+    { id:'m3', name:'Sambal Udang Belado', emoji:'🦐', price:10.00, desc:'Succulent prawns & petai beans wok-tossed in fiery Belado sambal.' },
+    { id:'m4', name:'Soto Ayam Betawi', emoji:'🍜', price:10.00, desc:'Rich and creamy Jakarta-style chicken soup with lontong and crispy shallots.' },
+    { id:'m5', name:'Ayam Taliwang', emoji:'🍗', price:11.00, desc:'Lombok-style grilled chicken marinated in a smoky, spicy taliwang sauce.' },
   ],
   sides: [
-    { id:'s1', name:'Bakwan Jagung', emoji:'🌽', price:5.00,  desc:'Crispy Indonesian sweetcorn fritters, golden and fluffy inside.' },
-    { id:'s2', name:'Sambal Goreng Teri', emoji:'🫑', price:4.50,  desc:'Crispy anchovies, tempe & long beans tossed in fragrant sambal.' },
-    { id:'s4', name:'Jalang Kote Ujung Pandang', emoji:'🥠', price:5.00,  desc:'Crispy Makassar-style pastry pockets.' },
+    { id:'s1', name:'Bakwan Jagung', emoji:'🌽', price:5.00, desc:'Crispy Indonesian sweetcorn fritters, golden and fluffy inside.' },
+    { id:'s2', name:'Sambal Goreng Teri', emoji:'🫑', price:4.50, desc:'Crispy anchovies, tempe & long beans tossed in fragrant sambal.' },
+    { id:'s4', name:'Jalang Kote Ujung Pandang', emoji:'🥠', price:5.00, desc:'Crispy Makassar-style pastry pockets.' },
   ],
   drinks: [
-    { id:'d1', name:'Hot Americano', emoji:'☕', price:3.00,  desc:'Bold espresso with hot water, rich and smooth.' },
-    { id:'d2', name:'Latte', emoji:'🥛', price:4.50,  desc:'Espresso with steamed milk and a light layer of foam.' },
+    { id:'d1', name:'Hot Americano', emoji:'☕', price:3.00, desc:'Bold espresso with hot water, rich and smooth.' },
+    { id:'d2', name:'Latte', emoji:'🥛', price:4.50, desc:'Espresso with steamed milk and a light layer of foam.' },
   ]
 };
 
@@ -37,8 +37,56 @@ export default function Home() {
   const [showPayNow, setShowPayNow] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [customer, setCustomer] = useState({ name: '', phone: '', address: '' });
+  const [errors, setErrors] = useState({ name: '', phone: '', address: '' });
+  const [addressQuery, setAddressQuery] = useState('');
+  const [addressSuggestions, setAddressSuggestions] = useState<any[]>([]);
+  const [addressLoading, setAddressLoading] = useState(false);
 
-  // 🛒 Cart Logic
+  // ── Validation ──
+  const validatePhone = (phone: string) => /^[89]\d{7}$/.test(phone.replace(/\s/g, ''));
+  const validateName = (name: string) => name.trim().length >= 2;
+
+  // ── OneMap Address Search ──
+  const searchAddress = async (query: string) => {
+    setAddressQuery(query);
+    setCustomer(prev => ({ ...prev, address: '' }));
+    if (query.length < 3) { setAddressSuggestions([]); return; }
+    setAddressLoading(true);
+    try {
+      const res = await fetch(
+        `https://www.onemap.gov.sg/api/common/elastic/search?searchVal=${encodeURIComponent(query)}&returnGeom=N&getAddrDetails=Y&pageNum=1`
+      );
+      const data = await res.json();
+      setAddressSuggestions(data.results?.slice(0, 5) || []);
+    } catch {
+      setAddressSuggestions([]);
+    } finally {
+      setAddressLoading(false);
+    }
+  };
+
+  const selectAddress = (result: any) => {
+    const formatted = `${result.BLK_NO ? result.BLK_NO + ' ' : ''}${result.ROAD_NAME}${result.BUILDING && result.BUILDING !== 'NIL' ? ', ' + result.BUILDING : ''}, Singapore ${result.POSTAL}`;
+    setCustomer(prev => ({ ...prev, address: formatted }));
+    setAddressQuery(formatted);
+    setAddressSuggestions([]);
+    setErrors(prev => ({ ...prev, address: '' }));
+  };
+
+  // ── Checkout with validation ──
+  const handleCheckout = () => {
+    const newErrors = { name: '', phone: '', address: '' };
+    if (!validateName(customer.name)) newErrors.name = 'Please enter your full name (min. 2 characters)';
+    if (!validatePhone(customer.phone)) newErrors.phone = 'Enter a valid SG mobile number (e.g. 91234567)';
+    if (!customer.address.trim()) newErrors.address = 'Please search and select a Singapore address';
+    setErrors(newErrors);
+    if (!newErrors.name && !newErrors.phone && !newErrors.address) {
+      setIsCartOpen(false);
+      setShowPayNow(true);
+    }
+  };
+
+  // ── Cart Logic ──
   const addToCart = (item: any) => {
     setCart(prev => ({
       ...prev,
@@ -62,12 +110,11 @@ export default function Home() {
   const confirmOrder = () => {
     const items = Object.values(cart);
     const orderLines = items.map(i => `• ${i.qty}x ${i.name} — $${(i.price * i.qty).toFixed(2)}`).join('\n');
-    const msg = `🛎️ *NEW ORDER — Tuny's Kitchen*\n\n👤 *Customer:* ${customer.name}\n📞 *Phone:* ${customer.phone}\n📍 *Delivery:* ${customer.address || 'Self-collect'}\n\n🧾 *Order Details:*\n${orderLines}\n\n💰 *Total Paid:* $${cartTotal.toFixed(2)}`;
-    
+    const msg = `🛎️ *NEW ORDER — Tuny's Kitchen*\n\n👤 *Customer:* ${customer.name}\n📞 *Phone:* +65 ${customer.phone}\n📍 *Delivery:* ${customer.address}\n\n🧾 *Order Details:*\n${orderLines}\n\n💰 *Total Paid:* $${cartTotal.toFixed(2)}`;
     window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
     setShowPayNow(false);
     setShowSuccess(true);
-    setCart({}); // Clear cart after order
+    setCart({});
   };
 
   return (
@@ -132,6 +179,8 @@ export default function Home() {
               <h2 className="text-lg font-bold flex items-center gap-2"><ShoppingCart size={20}/> Your Order</h2>
               <button onClick={() => setIsCartOpen(false)}><X /></button>
             </div>
+
+            {/* Cart Items */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {Object.values(cart).length === 0 ? (
                 <p className="text-center text-gray-400 py-10">Your cart is empty... 😋</p>
@@ -152,17 +201,93 @@ export default function Home() {
                 ))
               )}
             </div>
+
+            {/* Customer Form */}
             <div className="p-4 border-t bg-[#fdf6ec] space-y-3">
-              <input placeholder="Your Name" className="w-full p-2 border rounded" onChange={e => setCustomer({...customer, name: e.target.value})} />
-              <input placeholder="WhatsApp Phone" className="w-full p-2 border rounded" onChange={e => setCustomer({...customer, phone: e.target.value})} />
-              <input placeholder="Address / Self-collect" className="w-full p-2 border rounded" onChange={e => setCustomer({...customer, address: e.target.value})} />
+
+              {/* Name */}
+              <div>
+                <input
+                  placeholder="Full Name *"
+                  value={customer.name}
+                  className={`w-full p-2 border rounded text-sm ${errors.name ? 'border-red-400 bg-red-50' : 'border-gray-300 bg-white'}`}
+                  onChange={e => {
+                    setCustomer({ ...customer, name: e.target.value });
+                    if (errors.name) setErrors(prev => ({ ...prev, name: '' }));
+                  }}
+                />
+                {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+              </div>
+
+              {/* Phone */}
+              <div>
+                <div className={`flex items-center border rounded overflow-hidden ${errors.phone ? 'border-red-400' : 'border-gray-300'}`}>
+                  <span className="bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-600 border-r border-gray-300 whitespace-nowrap">+65</span>
+                  <input
+                    placeholder="8 digit mobile number *"
+                    value={customer.phone}
+                    maxLength={8}
+                    className={`flex-1 p-2 text-sm outline-none ${errors.phone ? 'bg-red-50' : 'bg-white'}`}
+                    onChange={e => {
+                      const val = e.target.value.replace(/\D/g, '');
+                      setCustomer({ ...customer, phone: val });
+                      if (errors.phone) setErrors(prev => ({ ...prev, phone: '' }));
+                    }}
+                  />
+                  {customer.phone.length === 8 && (
+                    <span className="pr-2 text-sm">{validatePhone(customer.phone) ? '✅' : '❌'}</span>
+                  )}
+                </div>
+                {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+              </div>
+
+              {/* Address with OneMap Search */}
+              <div className="relative">
+                <div className={`flex items-center border rounded overflow-hidden ${errors.address ? 'border-red-400' : 'border-gray-300'}`}>
+                  <MapPin size={16} className="ml-2 text-gray-400 shrink-0" />
+                  <input
+                    placeholder="Search Singapore address or postal code *"
+                    value={addressQuery}
+                    className={`flex-1 p-2 text-sm outline-none ${errors.address ? 'bg-red-50' : 'bg-white'}`}
+                    onChange={e => searchAddress(e.target.value)}
+                  />
+                  {addressLoading && <Loader2 size={16} className="mr-2 animate-spin text-gray-400" />}
+                </div>
+                {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
+
+                {/* Suggestions Dropdown */}
+                {addressSuggestions.length > 0 && (
+                  <div className="absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 overflow-hidden">
+                    {addressSuggestions.map((result, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => selectAddress(result)}
+                        className="w-full text-left px-3 py-2 text-sm hover:bg-[#f5e6cc] border-b border-gray-100 last:border-0"
+                      >
+                        <div className="font-semibold text-[#3b2415] text-xs">
+                          {result.BLK_NO ? result.BLK_NO + ' ' : ''}{result.ROAD_NAME}
+                          {result.BUILDING && result.BUILDING !== 'NIL' ? `, ${result.BUILDING}` : ''}
+                        </div>
+                        <div className="text-gray-400 text-xs">Singapore {result.POSTAL}</div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Confirmed address badge */}
+                {customer.address && (
+                  <p className="mt-1 text-xs text-green-600 font-medium">✅ Address confirmed</p>
+                )}
+              </div>
+
+              {/* Total & Checkout */}
               <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-200">
                 <span>Total:</span>
                 <span>${cartTotal.toFixed(2)}</span>
               </div>
-              <button 
-                onClick={() => { setIsCartOpen(false); setShowPayNow(true); }}
-                disabled={cartCount === 0 || !customer.name || !customer.phone}
+              <button
+                onClick={handleCheckout}
+                disabled={cartCount === 0}
                 className="w-full bg-[#c8401a] text-white py-3 rounded-xl font-bold disabled:opacity-50"
               >
                 Checkout via PayNow →
