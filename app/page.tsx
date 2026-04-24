@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { ShoppingCart, X, CheckCircle2, QrCode, Plus, Minus, MapPin, Loader2 } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 // ── CONFIGURATION ──
 const CONFIG = {
@@ -107,10 +108,19 @@ export default function Home() {
   const cartTotal = Object.values(cart).reduce((sum, item) => sum + (item.price * item.qty), 0);
   const cartCount = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
 
-  const confirmOrder = () => {
+  const confirmOrder = async () => {
     const items = Object.values(cart);
     const orderLines = items.map(i => `• ${i.qty}x ${i.name} — $${(i.price * i.qty).toFixed(2)}`).join('\n');
     const msg = `🛎️ *NEW ORDER — Tuny's Kitchen*\n\n👤 *Customer:* ${customer.name}\n📞 *Phone:* +65 ${customer.phone}\n📍 *Delivery:* ${customer.address}\n\n🧾 *Order Details:*\n${orderLines}\n\n💰 *Total Paid:* $${cartTotal.toFixed(2)}`;
+
+    await supabase.from('orders').insert({
+      customer_name: customer.name,
+      customer_phone: customer.phone,
+      delivery_address: customer.address,
+      items: Object.values(cart),
+      total: cartTotal,
+      status: 'pending'
+    })
     window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
     setShowPayNow(false);
     setShowSuccess(true);
