@@ -39,8 +39,8 @@ export default function Home() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [showPayNow, setShowPayNow] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [customer, setCustomer] = useState({ name: '', phone: '', address: '' });
-  const [errors, setErrors] = useState({ name: '', phone: '', address: '' });
+  const [customer, setCustomer] = useState({ name: '', phone: '', address: '', unit: '' });
+  const [errors, setErrors] = useState({ name: '', phone: '', address: '', unit: '' });
   const [addressQuery, setAddressQuery] = useState('');
   const [addressSuggestions, setAddressSuggestions] = useState<any[]>([]);
   const [addressLoading, setAddressLoading] = useState(false);
@@ -78,7 +78,7 @@ export default function Home() {
 
   // ── Checkout with validation ──
   const handleCheckout = () => {
-    const newErrors = { name: '', phone: '', address: '' };
+    const newErrors = { name: '', phone: '', address: '', unit: '' };
     if (!validateName(customer.name)) newErrors.name = 'Please enter your full name (min. 2 characters)';
     if (!validatePhone(customer.phone)) newErrors.phone = 'Enter a valid SG mobile number (e.g. 91234567)';
     if (!customer.address.trim()) newErrors.address = 'Please search and select a Singapore address';
@@ -113,12 +113,13 @@ export default function Home() {
   const confirmOrder = async () => {
     const items = Object.values(cart);
     const orderLines = items.map(i => `• ${i.qty}x ${i.name} — $${(i.price * i.qty).toFixed(2)}`).join('\n');
-    const msg = `🛎️ *NEW ORDER — Tuny's Kitchen*\n\n👤 *Customer:* ${customer.name}\n📞 *Phone:* +65 ${customer.phone}\n📍 *Delivery:* ${customer.address}\n\n🧾 *Order Details:*\n${orderLines}\n\n💰 *Total Paid:* $${cartTotal.toFixed(2)}`;
+    const fullAddress = customer.unit ? `${customer.unit}, ${customer.address}` : customer.address;
+    const msg = `🛎️ *NEW ORDER — Tuny's Kitchen*\n\n👤 *Customer:* ${customer.name}\n📞 *Phone:* +65 ${customer.phone}\n📍 *Delivery:* ${fullAddress}\n\n🧾 *Order Details:*\n${orderLines}\n\n💰 *Total Paid:* $${cartTotal.toFixed(2)}`;
 
     await supabase.from('orders').insert({
       customer_name: customer.name,
       customer_phone: customer.phone,
-      delivery_address: customer.address,
+      delivery_address: fullAddress,
       items: Object.values(cart),
       total: cartTotal,
       status: 'pending'
@@ -300,6 +301,19 @@ export default function Home() {
                   <p className="mt-1 text-xs text-green-600 font-medium">✅ Address confirmed</p>
                 )}
               </div>
+
+              {/* Unit / Apartment Number */}
+              {customer.address && (
+                <div>
+                  <input
+                    placeholder="Unit / Apartment No. (e.g. #05-12)"
+                    value={customer.unit}
+                    className="w-full p-2 border border-gray-300 rounded text-sm bg-white"
+                    onChange={e => setCustomer({ ...customer, unit: e.target.value })}
+                  />
+                  <p className="text-gray-400 text-xs mt-1">Optional — leave blank if not applicable</p>
+                </div>
+              )}
 
               {/* Total & Checkout */}
               <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-200">
