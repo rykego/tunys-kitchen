@@ -13,15 +13,14 @@ const CONFIG = {
 // ── MENU DATA (From your original index.html) ──
 const MENU = {
   main: [
-    { id:'m1', name:'Nasi Kuning (Yellow Rice) Set', emoji:'🍛', price:7.50,  desc:'Fragrant turmeric yellow rice served with sides & sambal.' },
-    { id:'m2', name:'Nasi Uduk Set', emoji:'🍲', price:8.00,  desc:'Fragrant coconut steamed rice served with traditional Indonesian sides.' },
-    { id:'m3', name:'Pete Udang Sambal Belado', emoji:'🦐', price:6.50,  desc:'Succulent prawns & petai beans wok-tossed in fiery Belado sambal.' },
-    { id:'m4', name:'Ayam Masak Merah', emoji:'🍗', price:9.00,  desc:'Tender chicken in a spiced tomato-chilli gravy.' },
-    { id:'m5', name:'Lor Mee', emoji:'🥣', price:7.00,  desc:'Thick, savoury braised noodles with eggs & ngoh hiang.' },
-    { id:'m6', name:'Fried Rice (Homestyle)', emoji:'🍚', price:6.00,  desc:'Wok-tossed with egg, vegetables and a hint of XO.' },
+    { id:'m1', name:'Nasi Kuning (Yellow Rice) Set', emoji:'🍛', price:12.00,  desc:'Fragrant turmeric yellow rice served with sides & sambal.' },
+    { id:'m2', name:'Nasi Uduk Set', emoji:'🍲', price:12.00,  desc:'Fragrant coconut steamed rice served with traditional Indonesian sides.' },
+    { id:'m3', name:'Sambal Udang Belado', emoji:'🦐', price:10.00,  desc:'Succulent prawns & petai beans wok-tossed in fiery Belado sambal.' },
+    { id:'m4', name:'Soto Ayam Betawi', emoji:'🍜', price:10.00,  desc:'Rich and creamy Jakarta-style chicken soup with lontong and crispy shallots.' },
+    { id:'m5', name:'Ayam Taliwang', emoji:'🍗', price:11.00,  desc:'Lombok-style grilled chicken marinated in a smoky, spicy taliwang sauce.' },
   ],
   sides: [
-    { id:'s1', name:'Achar', emoji:'🥒', price:3.00,  desc:'House-pickled cucumber, carrot & pineapple.' },
+    { id:'s1', name:'Bakwan Jagung', emoji:'🌽', price:5.00,  desc:'Crispy Indonesian sweetcorn fritters, golden and fluffy inside.' },
     { id:'s2', name:'Sambal Goreng Teri', emoji:'🫑', price:4.50,  desc:'Crispy anchovies, tempe & long beans tossed in fragrant sambal.' },
     { id:'s4', name:'Jalang Kote Ujung Pandang', emoji:'🥠', price:5.00,  desc:'Crispy Makassar-style pastry pockets.' },
   ],
