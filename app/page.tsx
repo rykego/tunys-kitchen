@@ -9,6 +9,8 @@ const CONFIG = {
   businessName: process.env.NEXT_PUBLIC_BUSINESS_NAME || "Default Kitchen",
   paynowNumber: process.env.NEXT_PUBLIC_PAYNOW_NUMBER || "",
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "",
+  callMeBotPhone: process.env.NEXT_PUBLIC_CALLMEBOT_PHONE || "",
+  callMeBotApiKey: process.env.NEXT_PUBLIC_CALLMEBOT_APIKEY || "",
 };
 
 // ── MENU DATA ──
@@ -121,6 +123,15 @@ export default function Home() {
       total: cartTotal,
       status: 'pending'
     })
+    // Send WhatsApp notification via CallMeBot
+    try {
+      await fetch(
+        `https://api.callmebot.com/whatsapp.php?phone=${CONFIG.callMeBotPhone}&text=${encodeURIComponent(msg)}&apikey=${CONFIG.callMeBotApiKey}`
+      );
+    } catch (err) {
+      console.error('CallMeBot notification failed:', err);
+    }
+
     window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
     setShowPayNow(false);
     setShowSuccess(true);
