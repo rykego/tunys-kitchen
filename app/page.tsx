@@ -50,7 +50,7 @@ const MENU = {
   sides: [
     { id:'s1', name:'Bakwan Jagung', emoji:'🌽', price:5.00, desc:'Crispy Indonesian sweetcorn fritters, golden and fluffy inside.' },
     { id:'s2', name:'Sambal Goreng Teri', emoji:'🫑', price:4.50, desc:'Crispy anchovies, tempe & long beans tossed in fragrant sambal.' },
-    { id:'s4', name:'Jalang Kote Ujung Pandang', emoji:'🥠', price:5.00, desc:'Crispy Makassar-style pastry pockets.' },
+    { id:'s4', name:'Jalang Kote Ujung Pandang', emoji:'🥠', price:5.00, desc:'Crispy Makassar-style pastry pockets.', image:'/images/jalang_kote.jpg' },
   ],
   drinks: [
     { id:'d1', name:'Hot Americano', emoji:'☕', price:3.00, desc:'Bold espresso with hot water, rich and smooth.' },
@@ -256,9 +256,15 @@ export default function Home() {
 
       {/* GRID */}
       <main className="max-w-6xl mx-auto p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {MENU[activeTab as keyof typeof MENU]?.map((item) => (
+        {MENU[activeTab as keyof typeof MENU]?.map((item: any) => (
           <div key={item.id} className="bg-white rounded-2xl shadow-sm border border-[#f5e6cc] overflow-hidden flex flex-col">
-            <div className="bg-[#f5e6cc] text-5xl py-8 text-center">{item.emoji}</div>
+            {item.image ? (
+              <div className="h-48 overflow-hidden">
+                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+              </div>
+            ) : (
+              <div className="bg-[#f5e6cc] text-5xl py-8 text-center">{item.emoji}</div>
+            )}
             <div className="p-4 flex-1 flex flex-col">
               <h3 className="font-bold text-[#3b2415]">{item.name}</h3>
               <p className="text-xs text-[#8a6a50] mt-1 flex-1">{item.desc}</p>
