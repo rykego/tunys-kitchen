@@ -1,8 +1,33 @@
 'use client';
 
-import React, { useState } from 'react';
-import { ShoppingCart, X, CheckCircle2, QrCode, Plus, Minus, MapPin, Loader2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ShoppingCart, X, CheckCircle2, Plus, Minus, MapPin, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+
+
+// ── PAYNOW QR GENERATOR ──
+function buildPayNowQR(phone: string): string {
+  function crc16(str: string): string {
+    let crc = 0xFFFF;
+    for (let i = 0; i < str.length; i++) {
+      crc ^= str.charCodeAt(i) << 8;
+      for (let j = 0; j < 8; j++) {
+        crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
+      }
+    }
+    return ((crc & 0xFFFF).toString(16).toUpperCase()).padStart(4, '0');
+  }
+  function field(id: string, value: string): string {
+    return id + value.length.toString().padStart(2, '0') + value;
+  }
+  const paynowString = field('00','SG.PAYNOW') + field('01','0') + field('02', phone) + field('03','1') + field('04','20491231');
+  const qrData =
+    field('00','01') + field('01','12') + field('26', paynowString) +
+    field('52','0000') + field('53','702') + field('58','SG') +
+    field('59','TUNYS KITCHEN') + field('60','Singapore');
+  const withCrc = qrData + '6304';
+  return withCrc + crc16(withCrc);
+}
 
 // ── CONFIGURATION ──
 const CONFIG = {
@@ -39,11 +64,25 @@ export default function Home() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [showPayNow, setShowPayNow] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState('');
+  const [snapshotCartTotal, setSnapshotCartTotal] = useState(0);
   const [customer, setCustomer] = useState({ name: '', phone: '', address: '', unit: '' });
   const [errors, setErrors] = useState({ name: '', phone: '', address: '', unit: '' });
   const [addressQuery, setAddressQuery] = useState('');
   const [addressSuggestions, setAddressSuggestions] = useState<any[]>([]);
   const [addressLoading, setAddressLoading] = useState(false);
+
+
+  useEffect(() => {
+    if (showPayNow) {
+      import('qrcode').then(QRCode => {
+        const qrString = buildPayNowQR('+6597850256');
+        QRCode.toDataURL(qrString, { width: 220, margin: 2 }, (_: any, url: string) => {
+          setQrDataUrl(url);
+        });
+      });
+    }
+  }, [showPayNow]);
 
   // ── Validation ──
   const validatePhone = (phone: string) => /^[89]\d{7}$/.test(phone.replace(/\s/g, ''));
@@ -84,6 +123,7 @@ export default function Home() {
     if (!customer.address.trim()) newErrors.address = 'Please search and select a Singapore address';
     setErrors(newErrors);
     if (!newErrors.name && !newErrors.phone && !newErrors.address) {
+      setSnapshotCartTotal(cartTotal);
       setIsCartOpen(false);
       setShowPayNow(true);
     }
@@ -342,11 +382,16 @@ export default function Home() {
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60">
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm text-center">
             <h2 className="text-2xl font-bold text-[#3b2415] mb-4">Pay via PayNow</h2>
-            <div className="bg-[#fdf6ec] border-2 border-dashed border-[#d4952a] p-6 rounded-xl mb-4">
-              <QrCode size={64} className="mx-auto text-gray-400 mb-2" />
-              <div className="text-xl font-bold">{CONFIG.paynowNumber}</div>
-              <div className="text-sm text-gray-500">Tuny's Kitchen</div>
-              <div className="text-2xl font-bold text-[#c8401a] mt-2">${cartTotal.toFixed(2)}</div>
+            <div className="bg-[#fdf6ec] border-2 border-dashed border-[#d4952a] p-4 rounded-xl mb-4">
+              {qrDataUrl ? (
+                <img src={qrDataUrl} alt="PayNow QR Code" className="mx-auto w-52 h-52" />
+              ) : (
+                <div className="w-52 h-52 mx-auto flex items-center justify-center">
+                  <Loader2 size={32} className="animate-spin text-[#d4952a]" />
+                </div>
+              )}
+              <div className="text-sm text-gray-500 mt-2">Tuny's Kitchen</div>
+              <div className="text-2xl font-bold text-[#c8401a] mt-1">SGD {snapshotCartTotal.toFixed(2)}</div>
             </div>
             <button onClick={confirmOrder} className="w-full bg-[#2d6a4f] text-white py-3 rounded-xl font-bold mb-2">✅ I've Paid — Confirm Order</button>
             <button onClick={() => setShowPayNow(false)} className="text-gray-400 text-sm underline">Go Back</button>
