@@ -111,19 +111,23 @@ export default function Home() {
   const cartCount = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
 
   const confirmOrder = async () => {
+    // Snapshot values before any async ops or state changes
     const items = Object.values(cart);
+    const snapshotTotal = items.reduce((sum, item) => sum + (item.price * item.qty), 0);
     const orderLines = items.map(i => `• ${i.qty}x ${i.name} — $${(i.price * i.qty).toFixed(2)}`).join('\n');
     const fullAddress = customer.unit ? `${customer.unit}, ${customer.address}` : customer.address;
-    const msg = `🛎️ *NEW ORDER — Tuny's Kitchen*\n\n👤 *Customer:* ${customer.name}\n📞 *Phone:* +65 ${customer.phone}\n📍 *Delivery:* ${fullAddress}\n\n🧾 *Order Details:*\n${orderLines}\n\n💰 *Total Paid:* $${cartTotal.toFixed(2)}`;
+    const msg = `🛎️ *NEW ORDER — Tuny's Kitchen*\n\n👤 *Customer:* ${customer.name}\n📞 *Phone:* +65 ${customer.phone}\n📍 *Delivery:* ${fullAddress}\n\n🧾 *Order Details:*\n${orderLines}\n\n💰 *Total Paid:* $${snapshotTotal.toFixed(2)}`;
 
+    // Save to Supabase
     await supabase.from('orders').insert({
       customer_name: customer.name,
       customer_phone: customer.phone,
       delivery_address: fullAddress,
-      items: Object.values(cart),
-      total: cartTotal,
+      items: items,
+      total: snapshotTotal,
       status: 'pending'
-    })
+    });
+
     // Send WhatsApp notification via CallMeBot
     try {
       await fetch(
@@ -133,10 +137,10 @@ export default function Home() {
       console.error('CallMeBot notification failed:', err);
     }
 
-    window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+    // Clear cart and show success
+    setCart({});
     setShowPayNow(false);
     setShowSuccess(true);
-    setCart({});
   };
 
   return (
