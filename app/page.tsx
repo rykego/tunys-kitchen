@@ -114,7 +114,7 @@ export default function Home() {
     // Snapshot values before any async ops or state changes
     const items = Object.values(cart);
     const snapshotTotal = items.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    const dollarSign = 'S$';
+    const dollarSign = 'SGD ';
     const orderLines = items.map(i => '• ' + i.qty + 'x ' + i.name + ' — ' + dollarSign + (i.price * i.qty).toFixed(2)).join('\n');
     const fullAddress = customer.unit ? `${customer.unit}, ${customer.address}` : customer.address;
     const msg = '🛎️ *NEW ORDER — Tuny\'s Kitchen*\n\n👤 *Customer:* ' + customer.name + '\n📞 *Phone:* +65 ' + customer.phone + '\n📍 *Delivery:* ' + fullAddress + '\n\n🧾 *Order Details:*\n' + orderLines + '\n\n💰 *Total Paid:* ' + dollarSign + snapshotTotal.toFixed(2);
