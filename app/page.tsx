@@ -49,7 +49,7 @@ const MENU = {
   ],
   sides: [
     { id:'s1', name:'Bakwan Jagung', emoji:'🌽', price:5.00, desc:'Crispy Indonesian sweetcorn fritters, golden and fluffy inside.', image:'/images/bakwan_jagung.jpg' },
-    { id:'s2', name:'Sambal Goreng Teri', emoji:'🫑', price:4.50, desc:'Crispy anchovies, tempe & long beans tossed in fragrant sambal.' },
+    { id:'s2', name:'Sambal Goreng Teri', emoji:'🫑', price:4.50, desc:'Crispy anchovies, tempe & long beans tossed in fragrant sambal.', image:'/images/sambal_goreng_teri.jpg' },
     { id:'s4', name:'Jalang Kote Ujung Pandang', emoji:'🥠', price:5.00, desc:'Crispy Makassar-style pastry pockets.', image:'/images/jalang_kote.jpg' },
   ],
   drinks: [
