@@ -44,7 +44,7 @@ const MENU = {
     { id:'m1', name:'Nasi Kuning (Yellow Rice) Set', emoji:'🍛', price:12.00, desc:'Fragrant turmeric yellow rice served with sides & sambal.', image:'/images/nasi_kuning.jpg' },
     { id:'m2', name:'Nasi Uduk Set', emoji:'🍲', price:12.00, desc:'Fragrant coconut steamed rice served with traditional Indonesian sides.', image:'/images/nasi_uduk.jpg' },
     { id:'m3', name:'Sambal Udang Belado', emoji:'🦐', price:10.00, desc:'Succulent prawns & petai beans wok-tossed in fiery Belado sambal.', image:'/images/udang_belado.jpg' },
-    { id:'m4', name:'Soto Ayam Betawi', emoji:'🍜', price:10.00, desc:'Rich and creamy Jakarta-style chicken soup with lontong and crispy shallots.' },
+    { id:'m4', name:'Soto Ayam Betawi', emoji:'🍜', price:10.00, desc:'Rich and creamy Jakarta-style chicken soup with lontong and crispy shallots.', image:'/images/soto_betawi.jpg' },
     { id:'m5', name:'Ayam Taliwang', emoji:'🍗', price:11.00, desc:'Lombok-style grilled chicken marinated in a smoky, spicy taliwang sauce.', image:'/images/ayam_taliwang.jpg' },
   ],
   sides: [
