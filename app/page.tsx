@@ -48,7 +48,7 @@ const MENU = {
     { id:'m5', name:'Ayam Taliwang', emoji:'🍗', price:11.00, desc:'Lombok-style grilled chicken marinated in a smoky, spicy taliwang sauce.', image:'/images/ayam_taliwang.jpg' },
   ],
   sides: [
-    { id:'s1', name:'Bakwan Jagung', emoji:'🌽', price:5.00, desc:'Crispy Indonesian sweetcorn fritters, golden and fluffy inside.' },
+    { id:'s1', name:'Bakwan Jagung', emoji:'🌽', price:5.00, desc:'Crispy Indonesian sweetcorn fritters, golden and fluffy inside.', image:'/images/bakwan_jagung.jpg' },
     { id:'s2', name:'Sambal Goreng Teri', emoji:'🫑', price:4.50, desc:'Crispy anchovies, tempe & long beans tossed in fragrant sambal.' },
     { id:'s4', name:'Jalang Kote Ujung Pandang', emoji:'🥠', price:5.00, desc:'Crispy Makassar-style pastry pockets.', image:'/images/jalang_kote.jpg' },
   ],
