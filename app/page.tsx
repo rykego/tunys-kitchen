@@ -279,6 +279,52 @@ export default function Home() {
         ))}
       </main>
 
+      {/* PHOTO GALLERY */}
+      <section className="max-w-6xl mx-auto px-4 py-10">
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center gap-2 mb-3">
+            <span className="block h-px w-8 bg-[#d4952a]"></span>
+            <span className="text-[#d4952a] text-xs font-bold tracking-widest uppercase">Our Kitchen</span>
+            <span className="block h-px w-8 bg-[#d4952a]"></span>
+          </div>
+          <h3 className="font-serif text-2xl md:text-3xl text-[#3b2415] italic">A Peek Inside Tuny&apos;s Kitchen</h3>
+          <p className="text-[#8a6a50] text-sm mt-1">Real food, made with love at home</p>
+        </div>
+        <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 space-y-3">
+          {[
+            { src: '/images/gallery/gallery_01_soto_packed.jpg',      alt: 'Soto Ayam packed orders' },
+            { src: '/images/gallery/gallery_02_nasi_goreng.jpg',      alt: 'Nasi Goreng Udang' },
+            { src: '/images/gallery/gallery_03_sambal_jar.jpg',       alt: 'Homemade Sambal' },
+            { src: '/images/gallery/gallery_04_telur_bumbu.jpg',      alt: 'Telur Bumbu Kuning' },
+            { src: '/images/gallery/gallery_05_bakwan_packed.jpg',    alt: 'Bakwan Jagung packed' },
+            { src: '/images/gallery/gallery_06_nasi_uduk_packed.jpg', alt: 'Nasi Uduk orders ready' },
+            { src: '/images/gallery/gallery_07_telur_balado.jpg',     alt: 'Telur Balado' },
+            { src: '/images/gallery/gallery_08_nasi_uduk_packed2.jpg',alt: 'Nasi Uduk pre-orders' },
+            { src: '/images/gallery/gallery_09_kroket.jpg',           alt: 'Kroket Kentang' },
+            { src: '/images/gallery/gallery_10_nasi_uduk_plate.jpg',  alt: 'Nasi Uduk plated' },
+            { src: '/images/gallery/gallery_11_quail_eggs.jpg',       alt: 'Quail eggs' },
+            { src: '/images/gallery/gallery_12_nasi_goreng2.jpg',     alt: 'Nasi Goreng Udang' },
+            { src: '/images/gallery/gallery_13_soto_bowl.jpg',        alt: 'Soto Ayam bowl' },
+            { src: '/images/gallery/gallery_14_nasi_packed_bulk.jpg', alt: 'Bulk pre-orders' },
+            { src: '/images/gallery/gallery_15_bakwan_sayur.jpg',     alt: 'Bakwan Sayur' },
+            { src: '/images/gallery/gallery_16_ayam_penyet.jpg',      alt: 'Ayam Penyet' },
+            { src: '/images/gallery/gallery_17_sambal_jar2.jpg',      alt: 'Sambal Tuny Kitchen' },
+            { src: '/images/gallery/gallery_18_lumpia.jpg',           alt: 'Lumpia with sweet chilli' },
+            { src: '/images/gallery/gallery_19_soto_bowl2.jpg',       alt: 'Soto Ayam styled' },
+            { src: '/images/gallery/gallery_20_bakwan_jagung2.jpg',   alt: 'Bakwan Jagung fresh' },
+          ].map((img, i) => (
+            <div key={i} className="break-inside-avoid rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 mb-3">
+              <img
+                src={img.src}
+                alt={img.alt}
+                className="w-full object-cover hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+          ))}
+        </div>
+        <p className="text-center text-xs text-[#8a6a50] mt-6">Follow us on Instagram <span className="text-[#c8401a] font-semibold">@tunykitchen</span> for daily updates 🍛</p>
+      </section>
+
       {/* CART DRAWER */}
       {isCartOpen && (
         <div className="fixed inset-0 z-50 flex justify-end">
