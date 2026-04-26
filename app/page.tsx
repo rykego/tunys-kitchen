@@ -43,19 +43,19 @@ const MENU = {
   main: [
     { id:'m1', name:'Nasi Kuning (Yellow Rice) Set', emoji:'🍛', price:12.00, desc:'Fragrant turmeric yellow rice served with sides & sambal.', image:'/images/nasi_kuning.jpg' },
     { id:'m2', name:'Nasi Uduk Set', emoji:'🍲', price:12.00, desc:'Fragrant coconut steamed rice served with traditional Indonesian sides.', image:'/images/nasi_uduk.jpg' },
-    { id:'m3', name:'Sambal Udang Belado', emoji:'🦐', price:13.00, desc:'Succulent prawns & petai beans wok-tossed in fiery Belado sambal.', image:'/images/udang_belado.jpg' },
-    { id:'m4', name:'Soto Ayam Betawi', emoji:'🍜', price:12.00, desc:'Rich and creamy Jakarta-style chicken soup with lontong and crispy shallots.', image:'/images/soto_betawi.jpg' },
-    { id:'m5', name:'Ayam Taliwang', emoji:'🍗', price:13.00, desc:'Lombok-style grilled chicken marinated in a smoky, spicy taliwang sauce.', image:'/images/ayam_taliwang.jpg' },
+    { id:'m3', name:'Sambal Udang Belado', emoji:'🦐', price:10.00, desc:'Succulent prawns & petai beans wok-tossed in fiery Belado sambal.', image:'/images/udang_belado.jpg' },
+    { id:'m4', name:'Soto Ayam Betawi', emoji:'🍜', price:10.00, desc:'Rich and creamy Jakarta-style chicken soup with lontong and crispy shallots.', image:'/images/soto_betawi.jpg' },
+    { id:'m5', name:'Ayam Taliwang', emoji:'🍗', price:11.00, desc:'Lombok-style grilled chicken marinated in a smoky, spicy taliwang sauce.', image:'/images/ayam_taliwang.jpg' },
   ],
   sides: [
     { id:'s1', name:'Bakwan Jagung', emoji:'🌽', price:5.00, desc:'Crispy Indonesian sweetcorn fritters, golden and fluffy inside.', image:'/images/bakwan_jagung.jpg' },
-    { id:'s2', name:'Sambal Goreng Teri', emoji:'🫑', price:5.50, desc:'Crispy anchovies, tempe & long beans tossed in fragrant sambal.', image:'/images/sambal_goreng_teri.jpg' },
+    { id:'s2', name:'Sambal Goreng Teri', emoji:'🫑', price:4.50, desc:'Crispy anchovies, tempe & long beans tossed in fragrant sambal.', image:'/images/sambal_goreng_teri.jpg' },
     { id:'s4', name:'Jalang Kote Ujung Pandang', emoji:'🥠', price:5.00, desc:'Crispy Makassar-style pastry pockets.', image:'/images/jalang_kote.jpg' },
   ],
   drinks: [
     { id:'d1', name:'Hot Americano', emoji:'☕', price:3.00, desc:'Bold espresso with hot water, rich and smooth.' },
     { id:'d2', name:'Latte', emoji:'🥛', price:4.50, desc:'Espresso with steamed milk and a light layer of foam.' },
-    { id:'d3', name:'Homemade Barley', emoji:'🌾', price:2.00, desc:'Refreshing home-brewed barley drink, lightly sweetened and served cold.' },
+    { id:'d3', name:'Homemade Barley', emoji:'🌾', price:3.50, desc:'Refreshing home-brewed barley drink, lightly sweetened and served cold.' },
   ]
 };
 
@@ -454,6 +454,8 @@ export default function Home() {
                 <span>Total:</span>
                 <span>${cartTotal.toFixed(2)}</span>
               </div>
+              {/* PAYNOW DISABLED - re-enable when payment is ready */}
+              {/*
               <button
                 onClick={handleCheckout}
                 disabled={cartCount === 0}
@@ -461,13 +463,18 @@ export default function Home() {
               >
                 Checkout via PayNow →
               </button>
+              */}
+              <div className="w-full bg-[#f5e6cc] border border-[#d4952a] text-[#3b2415] py-3 px-4 rounded-xl text-center">
+                <p className="font-bold text-sm">🚧 Online Payment Coming Soon</p>
+                <p className="text-xs text-[#8a6a50] mt-1">To place an order, please contact us on WhatsApp or Instagram <span className="font-semibold">@tunykitchen</span></p>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* PAYNOW MODAL */}
-      {showPayNow && (
+      {/* PAYNOW MODAL - DISABLED - re-enable when payment is ready */}
+      {/* {showPayNow && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60">
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm text-center">
             <h2 className="text-2xl font-bold text-[#3b2415] mb-4">Pay via PayNow</h2>
@@ -486,7 +493,7 @@ export default function Home() {
             <button onClick={() => setShowPayNow(false)} className="text-gray-400 text-sm underline">Go Back</button>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* SUCCESS MODAL */}
       {showSuccess && (
