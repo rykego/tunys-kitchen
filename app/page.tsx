@@ -55,7 +55,7 @@ const MENU = {
   drinks: [
     { id:'d1', name:'Hot Americano', emoji:'☕', price:3.00, desc:'Bold espresso with hot water, rich and smooth.' },
     { id:'d2', name:'Latte', emoji:'🥛', price:4.50, desc:'Espresso with steamed milk and a light layer of foam.' },
-    { id:'d3', name:'Homemade Barley', emoji:'🌾', price:3.50, desc:'Refreshing home-brewed barley drink, lightly sweetened and served cold.' },
+    { id:'d3', name:'Homemade Barley', emoji:'🌾', price:2.00, desc:'Refreshing home-brewed barley drink, lightly sweetened and served cold.' },
   ]
 };
 
